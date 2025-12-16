@@ -12,6 +12,7 @@ import FAQs from './pages/FAQs';
 import FileImports from './pages/FileImports';
 import FileImportDetail from './pages/FileImportDetail';
 import Updates from './pages/Updates';
+import Metrics from './pages/Metrics';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
               <Route path="file-imports" element={<FileImports />} />
               <Route path="file-imports/:id" element={<FileImportDetail />} />
               <Route path="updates" element={<Updates />} />
+              <Route path="metrics" element={<Metrics />} />
               <Route path="partner-settings" element={<PartnerSettings />} />
               <Route path="core-connection" element={<CoreConnection />} />
               {/* Add more protected routes here */}
