@@ -7,6 +7,10 @@ import Dashboard from './pages/Dashboard';
 import Employees from './pages/Employees';
 import PartnerSettings from './pages/PartnerSettings';
 import CoreConnection from './pages/CoreConnection';
+import Packages from './pages/Packages';
+import FAQs from './pages/FAQs';
+import FileImports from './pages/FileImports';
+import FileImportDetail from './pages/FileImportDetail';
 
 function App() {
   return (
@@ -21,6 +25,10 @@ function App() {
             <Route path="/" element={<Layout />}>
               <Route index element={<Dashboard />} />
               <Route path="employees" element={<Employees />} />
+              <Route path="packages" element={<Packages />} />
+              <Route path="faqs" element={<FAQs />} />
+              <Route path="file-imports" element={<FileImports />} />
+              <Route path="file-imports/:id" element={<FileImportDetail />} />
               <Route path="partner-settings" element={<PartnerSettings />} />
               <Route path="core-connection" element={<CoreConnection />} />
               {/* Add more protected routes here */}

@@ -3,7 +3,8 @@ import {
   LayoutDashboard,
   Users,
   MessageSquare,
-  FileText,
+  Package,
+  Upload,
   BarChart3,
   Settings,
   Building2,
@@ -16,8 +17,13 @@ const Sidebar = () => {
     { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
     { icon: Users, label: 'Quản lý nhân viên', path: '/employees' },
     { icon: MessageSquare, label: 'Tư vấn', path: '/consultations' },
-    { icon: FileText, label: 'Cơ sở tri thức', path: '/knowledge' },
     { icon: BarChart3, label: 'Thống kê', path: '/metrics' },
+  ];
+
+  const knowledgeItems = [
+    { icon: Package, label: 'Gói cước', path: '/packages' },
+    { icon: HelpCircle, label: 'FAQ', path: '/faqs' },
+    { icon: Upload, label: 'Import dữ liệu', path: '/file-imports' },
   ];
 
   const settingsItems = [
@@ -43,6 +49,27 @@ const Sidebar = () => {
         {/* Main Menu */}
         <div className="mb-6">
           {menuItems.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) =>
+                `sidebar-link ${isActive ? 'active' : ''}`
+              }
+            >
+              <item.icon size={20} />
+              <span className="font-medium">{item.label}</span>
+            </NavLink>
+          ))}
+        </div>
+
+        {/* Knowledge Section */}
+        <div className="mb-6">
+          <div className="px-6 py-2">
+            <p className="text-xs font-semibold text-primary-300 uppercase tracking-wider">
+              Cơ sở tri thức
+            </p>
+          </div>
+          {knowledgeItems.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}

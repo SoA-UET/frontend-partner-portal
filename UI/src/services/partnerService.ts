@@ -1,4 +1,4 @@
-import apiClient from './apiClient';
+import { partnerInfoClient } from './apiClient';
 import {
   PartnerInfoResponse,
   UpdatePartnerInfoRequest,
@@ -14,7 +14,7 @@ class PartnerService {
    * Get current partner general information
    */
   async getPartnerInfo(): Promise<PartnerInfoResponse> {
-    const response = await apiClient.get<PartnerInfoResponse>(
+    const response = await partnerInfoClient.get<PartnerInfoResponse>(
       `${this.PARTNER_BASE}/info`
     );
     return response.data;
@@ -25,7 +25,7 @@ class PartnerService {
    * Update partner general information
    */
   async updatePartnerInfo(data: UpdatePartnerInfoRequest): Promise<PartnerInfoResponse> {
-    const response = await apiClient.patch<PartnerInfoResponse>(
+    const response = await partnerInfoClient.patch<PartnerInfoResponse>(
       `${this.PARTNER_BASE}/info`,
       data
     );
@@ -37,7 +37,7 @@ class PartnerService {
    * Test the connection to Telcenter Core
    */
   async testCoreConnection(data: CoreConnectionTestRequest): Promise<CoreConnectionTestResponse> {
-    const response = await apiClient.post<CoreConnectionTestResponse>(
+    const response = await partnerInfoClient.post<CoreConnectionTestResponse>(
       `${this.PARTNER_BASE}/core-connection/test`,
       data
     );
