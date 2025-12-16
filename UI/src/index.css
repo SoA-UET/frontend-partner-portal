@@ -1,0 +1,138 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-gray-200;
+  }
+  
+  body {
+    @apply bg-background text-text-main font-sans antialiased;
+    font-size: 14px;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-text-main font-semibold;
+  }
+
+  h1 {
+    @apply text-3xl;
+  }
+
+  h2 {
+    @apply text-2xl;
+  }
+
+  h3 {
+    @apply text-xl;
+  }
+}
+
+@layer components {
+  /* Card Component */
+  .card {
+    @apply bg-surface rounded-card shadow-card p-6;
+  }
+
+  .card-hover {
+    @apply hover:shadow-card-hover transition-shadow duration-200;
+  }
+
+  /* Button Styles */
+  .btn {
+    @apply px-4 py-2 rounded-button font-medium transition-colors duration-200 inline-flex items-center justify-center gap-2;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-primary-700;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-200 text-text-main hover:bg-gray-300;
+  }
+
+  .btn-success {
+    @apply bg-status-success text-white hover:bg-green-600;
+  }
+
+  .btn-error {
+    @apply bg-status-error text-white hover:bg-red-600;
+  }
+
+  .btn-outline {
+    @apply border-2 border-primary text-primary bg-transparent hover:bg-primary hover:text-white;
+  }
+
+  /* Input Styles */
+  .input {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-button focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
+  }
+
+  /* Badge/Status Components */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+
+  .badge-success {
+    @apply bg-green-100 text-green-800;
+  }
+
+  .badge-error {
+    @apply bg-red-100 text-red-800;
+  }
+
+  .badge-warning {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+
+  .badge-info {
+    @apply bg-blue-100 text-blue-800;
+  }
+
+  /* Grid Layout */
+  .dashboard-grid {
+    @apply grid grid-cols-12 gap-gutter;
+  }
+
+  /* Meta Text */
+  .text-meta {
+    @apply text-sm text-text-muted;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    @apply fixed left-0 top-0 h-screen bg-primary text-white;
+    width: 260px;
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 px-6 py-3 hover:bg-primary-700 transition-colors duration-200;
+  }
+
+  .sidebar-link.active {
+    @apply bg-primary-800 border-l-4 border-white;
+  }
+
+  /* Animations */
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.3s ease-out;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
