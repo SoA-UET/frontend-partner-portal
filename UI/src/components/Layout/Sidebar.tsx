@@ -6,6 +6,8 @@ import {
   FileText,
   BarChart3,
   Settings,
+  Building2,
+  Link2,
   HelpCircle,
 } from 'lucide-react';
 
@@ -16,7 +18,15 @@ const Sidebar = () => {
     { icon: MessageSquare, label: 'Tư vấn', path: '/consultations' },
     { icon: FileText, label: 'Cơ sở tri thức', path: '/knowledge' },
     { icon: BarChart3, label: 'Thống kê', path: '/metrics' },
-    { icon: Settings, label: 'Cài đặt', path: '/settings' },
+  ];
+
+  const settingsItems = [
+    { icon: Building2, label: 'Thông tin Partner', path: '/partner-settings' },
+    { icon: Link2, label: 'Kết nối Core', path: '/core-connection' },
+    { icon: Settings, label: 'Cài đặt chung', path: '/settings' },
+  ];
+
+  const helpItems = [
     { icon: HelpCircle, label: 'Trợ giúp', path: '/help' },
   ];
 
@@ -29,19 +39,59 @@ const Sidebar = () => {
       </div>
 
       {/* Navigation Menu */}
-      <nav className="py-4">
-        {menuItems.map((item) => (
-          <NavLink
-            key={item.path}
-            to={item.path}
-            className={({ isActive }) =>
-              `sidebar-link ${isActive ? 'active' : ''}`
-            }
-          >
-            <item.icon size={20} />
-            <span className="font-medium">{item.label}</span>
-          </NavLink>
-        ))}
+      <nav className="py-4 flex-1 overflow-y-auto">
+        {/* Main Menu */}
+        <div className="mb-6">
+          {menuItems.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) =>
+                `sidebar-link ${isActive ? 'active' : ''}`
+              }
+            >
+              <item.icon size={20} />
+              <span className="font-medium">{item.label}</span>
+            </NavLink>
+          ))}
+        </div>
+
+        {/* Settings Section */}
+        <div className="mb-6">
+          <div className="px-6 py-2">
+            <p className="text-xs font-semibold text-primary-300 uppercase tracking-wider">
+              Hệ thống
+            </p>
+          </div>
+          {settingsItems.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) =>
+                `sidebar-link ${isActive ? 'active' : ''}`
+              }
+            >
+              <item.icon size={20} />
+              <span className="font-medium">{item.label}</span>
+            </NavLink>
+          ))}
+        </div>
+
+        {/* Help Section */}
+        <div>
+          {helpItems.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              className={({ isActive }) =>
+                `sidebar-link ${isActive ? 'active' : ''}`
+              }
+            >
+              <item.icon size={20} />
+              <span className="font-medium">{item.label}</span>
+            </NavLink>
+          ))}
+        </div>
       </nav>
 
       {/* Footer/Version Info */}
