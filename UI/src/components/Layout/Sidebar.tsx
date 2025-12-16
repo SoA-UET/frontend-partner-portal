@@ -10,6 +10,7 @@ import {
   Building2,
   Link2,
   HelpCircle,
+  CloudCog,
 } from 'lucide-react';
 
 const Sidebar = () => {
@@ -24,6 +25,7 @@ const Sidebar = () => {
     { icon: Package, label: 'Gói cước', path: '/packages' },
     { icon: HelpCircle, label: 'FAQ', path: '/faqs' },
     { icon: Upload, label: 'Import dữ liệu', path: '/file-imports' },
+    { icon: CloudCog, label: 'Cập nhật lên Core', path: '/updates' },
   ];
 
   const settingsItems = [

@@ -80,4 +80,9 @@ export const knowledgeClient: AxiosInstance = createApiClient(
   import.meta.env.VITE_KNOWLEDGE_SERVICE_URL || 'http://localhost:7012'
 );
 
+// S12 - Partner Knowledge Update Service
+export const updateClient: AxiosInstance = createApiClient(
+  import.meta.env.VITE_KNOWLEDGE_UPDATE_SERVICE_URL || 'http://localhost:7013'
+);
+
 export default apiClient;
