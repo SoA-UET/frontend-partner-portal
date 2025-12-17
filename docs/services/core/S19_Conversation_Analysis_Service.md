@@ -1,4 +1,4 @@
-# Telcenter Core - Forwarded Partner Selection Service
+# Telcenter Core - Conversation Analysis Service
 
 Introducing the series of Telcenter Engineering.
 
@@ -22,7 +22,7 @@ The general deployment and communication topology is like this:
 
 The users' inquiries and answers to those are primarily in Vietnamese.
 
-Now, you are designing the Forwarded Partner Selection Service, in Python.
+Now, you are designing the Conversation Analysis Service, in Python.
 This service is inside the Core system.
 
 Here are the peer services that this service may interact with. We will come up
@@ -32,9 +32,9 @@ with the flow of this service itself later.
     mediating the users' inquiries and responses. It also holds
     the conversations database.
 
-- **S07 - Core's Partner Management Service:** The service that is responsible
-    for managing the partners' information, including
-    their IDs, names, and other metadata.
+- **S19b - Sentiment Analysis Service:** The service that is responsible
+    for analyzing the sentiment of a given text. It returns `Positive`,
+    `Negative`, or `Neutral`.
 
 ## A Note on API Transport Layers
 
@@ -69,75 +69,114 @@ a `.env.example` file for that.
 
 ### S01 - Consultation Service
 
-[A35](../../api_groups/A35.md)
+[A36](../../api_groups/A36.md)
 
-[A37](../../api_groups/A37.md)
+### S19b - Sentiment Analysis Service
 
-## Logic Flow
+[S19b](./S19b_Sentiment_Analysis_Service.md)
 
-1. S01 notifies S18
-    via A35a event `need_forwarding`
-    whenever a conversation needs to be
-    forwarded to a human agent at a partner
-    system.
+## The Flows
 
-2. S18 queries S07 to obtain
-    the list of available partners,
-    including their **IDs and names**.
-    This would be used for partner selection
-    later.
+### Flow 1: On New Message
 
-3. S18 calls Gemini LLM API
-    to select the best partner
-    for that conversation, based on
-    the conversation summary.
+1. S01 notifies this service (S19)
+    via A36a event `new_message`
+    whenever there is a new message in
+    any conversation. This event includes
+    the conversation ID, the message ID,
+    the current customer satisfaction score
+    of that conversation, the current summary
+    of the conversation, the content
+    of the message, the sender type,
+    among other things.
 
-    The prompt is like this:
+2. This service (S19) calls S19b
+    via its HTTP API to obtain the sentiment
+    analysis result of that message's content.
 
-    ```
-    Bạn là một tư vấn viên trung gian,
-    giúp kết nối khách hàng với các đối tác viễn thông.
-    Dựa trên tóm tắt cuộc hội thoại sau đây,
-    hãy chọn đối tác phù hợp nhất để chuyển tiếp cuộc hội thoại.
+3. This service (S19) notifies S01
+    via A36b event `update_message_emotion`
+    about the sentiment analysis result
+    of that message.
 
-    Định dạng phản hồi của bạn: chỉ là tên đối tác, không có gì khác.
-    Nếu không thể chọn đối tác phù hợp dựa vào ngữ cảnh
-    đã cho, trả lời "IMPOSSIBLE".
+4. S19 computes the new customer satisfaction
+    score of that conversation. The method
+    of computation is given below.
 
-    Danh sách các đối tác bao gồm:
-    ---
-    {partner_name_list}
-    ---
+    Then, S19 notifies S01
+    via A36b event `update_customer_satisfaction`
+    about the updated customer satisfaction
+    score of that conversation.
 
-    Tóm tắt cuộc hội thoại:
-    ---
-    {conversation_summary}
-    ---
+5. S19 also re-write the summary
+    of that conversation, using the method
+    given below.
 
-    Câu trả lời của bạn:
-    ```
+    Then, S19 notifies S01
+    via A36b event `update_conversation_summary`
+    about the updated summary of that conversation.
 
-4. If the LLM's response is not `IMPOSSIBLE`,
-    S18 looks up the selected partner's ID
-    based on the name returned by Gemini.
-    Then, S18 notifies S01
-    via A35b event `forwarded_partner_selection_finished`
-    about the selected partner ID and name.
+### Flow 2: On Rating Changed
 
-    Otherwise, S18 also notifies S01
-    via that event, but with status `error`
-    and message `Could not select a suitable partner.`.
+1. S01 notifies this service (S19)
+    via A36a event `rating_changed`
+    whenever the customer changes
+    the rating of any conversation.
+    Rating ranges from `1` to `5`.
 
-If it fails at any stage, the whole process fails.
-That is, immediately emit the A35b event
-`forwarded_partner_selection_finished`
-with status `error` and the
-appropriate error message
-indicating what went wrong.
+2. S19 notifies S01
+    via A36b event `update_customer_satisfaction`
+    about the updated customer satisfaction
+    score of that conversation. The
+    new score is *equal* to the new rating.
+
+### Customer Satisfaction Computation
+
+The customer satisfaction score is an integer
+ranging from `1` to `5`, inclusive.
+
+Given the current customer satisfaction score
+`curr_score` and the sentiment analysis result
+`sentiment` of the new message, the new customer
+satisfaction score `new_score` is computed as follows:
+
+- if `sentiment` is `Negative`:
+        new_score = floor(0.5 * (curr_score + 1))
+
+- if `sentiment` is `Positive`:
+        new_score = ceil(0.5 * (curr_score + 5))
+
+- if `sentiment` is `Neutral`:
+        new_score = max(curr_score, ceil(0.5 * (curr_score + 3)))
+
+### Conversation Summary Rewriting
+
+If the new message is from customer (i.e. `sender_type == 'CUSTOMER'`),
+the new summary is the old summary appended with the new message's content,
+like this:
+
+    summary = summary + "\nKhách hàng: XXX\n"
+
+Otherwise, the old summary is concatenated with the new message's `sender_type`
+and `content`, then fed into Gemini LLM
+with a prompt like this:
+
+    Tóm tắt đoạn hội thoại sau đây giữa khách hàng và đại lý tư vấn viễn thông.
+    Bản tóm tắt phải ngắn gọn, súc tích, đầy đủ ý chính, và bằng tiếng Việt.
+    Đoạn hội thoại:
+
+    {full_conversation_text}
+
+The response from Gemini LLM
+is the new summary.
+
+There must be an environment variable
+`GEMINI_API_KEY` that holds the API key
+to call Gemini LLM. Specify it in `.env.example`.
 
 ## This Service's APIs
 
-[A35](../../api_groups/A35.md)
+[A36](../../api_groups/A36.md)
 
 ## Technology
 
