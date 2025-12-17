@@ -8,8 +8,9 @@ import { useAuth } from '@/context/AuthContext';
 
 // Mock roles - Thay thế bằng API khi có
 const MOCK_ROLES: Role[] = [
-  { id: '693e71e316f2061afc669347', name: 'Partner Admin', permissions: ['employee:write', 'employee:read', 'admin:manage', 'employee:delete', 'consult_text', 'consult_audio'] },
-  { id: '693e71e316f2061afc669348', name: 'Partner Staff', permissions: ['consult_audio', 'consult_text'] },
+  { id: '694025ac0496f58b284da758', name: 'Partner Admin', permissions: ['employee:write', 'employee:read', 'admin:manage', 'employee:delete', 'consult_text', 'consult_audio'] },
+  { id: '694025ac0496f58b284da759', name: 'Tư vấn viên kênh thoại', permissions: ['consult_audio'] },
+  { id: '694025ac0496f58b284da75a', name: 'Tư vấn viên kênh nhắn tin', permissions: ['consult_text'] },
 ];
 
 const Employees: React.FC = () => {
