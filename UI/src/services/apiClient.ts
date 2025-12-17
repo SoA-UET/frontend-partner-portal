@@ -85,6 +85,11 @@ export const updateClient: AxiosInstance = createApiClient(
   import.meta.env.VITE_KNOWLEDGE_UPDATE_SERVICE_URL || 'http://localhost:7013'
 );
 
+// S13 - Partner Consultation Service
+export const consultationClient: AxiosInstance = createApiClient(
+  import.meta.env.VITE_CONSULTATION_SERVICE_URL || 'http://localhost:7015'
+);
+
 // S14 - Partner Metrics Service
 export const metricsClient: AxiosInstance = createApiClient(
   import.meta.env.VITE_METRICS_SERVICE_URL || 'http://localhost:7014'

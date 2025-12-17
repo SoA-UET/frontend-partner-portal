@@ -13,6 +13,8 @@ import FileImports from './pages/FileImports';
 import FileImportDetail from './pages/FileImportDetail';
 import Updates from './pages/Updates';
 import Metrics from './pages/Metrics';
+import Consultations from './pages/Consultations';
+import ConversationDetail from './pages/ConversationDetail';
 
 function App() {
   return (
@@ -32,6 +34,8 @@ function App() {
               <Route path="file-imports" element={<FileImports />} />
               <Route path="file-imports/:id" element={<FileImportDetail />} />
               <Route path="updates" element={<Updates />} />
+              <Route path="consultations" element={<Consultations />} />
+              <Route path="consultations/:id" element={<ConversationDetail />} />
               <Route path="metrics" element={<Metrics />} />
               <Route path="partner-settings" element={<PartnerSettings />} />
               <Route path="core-connection" element={<CoreConnection />} />
