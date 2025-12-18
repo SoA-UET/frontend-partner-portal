@@ -107,6 +107,36 @@ const FileImportDetail: React.FC = () => {
 
   const canApprove = fileImport.status === 'EXTRACTED';
 
+  // All Package fields except 'id' in display order
+  const packageFields: Array<keyof Omit<Package, 'id'>> = [
+    'Mã dịch vụ',
+    'Thời gian thanh toán',
+    'Các dịch vụ tiên quyết',
+    'Giá (VNĐ)',
+    'Chu kỳ (ngày)',
+    '4G tốc độ tiêu chuẩn/ngày',
+    '4G tốc độ cao/ngày',
+    '4G tốc độ tiêu chuẩn/chu kỳ',
+    '4G tốc độ cao/chu kỳ',
+    'Gọi nội mạng',
+    'Gọi ngoại mạng',
+    'Tin nhắn',
+    'Chi tiết',
+    'Tự động gia hạn',
+    'Cú pháp đăng ký',
+  ];
+
+  const renderCell = (pkg: Omit<Package, 'id'>, field: keyof Omit<Package, 'id'>) => {
+    const value = pkg?.[field];
+    if (value == null || value === '') return '-';
+    if (typeof value === 'number') {
+      // Append unit for cycle field, format all numbers in vi-VN
+      if (field === 'Chu kỳ (ngày)') return `${value.toLocaleString('vi-VN')} ngày`;
+      return value.toLocaleString('vi-VN');
+    }
+    return value;
+  };
+
   return (
     <div className="space-y-6">
       {toast && (
@@ -176,23 +206,26 @@ const FileImportDetail: React.FC = () => {
           <div className="px-6 py-4 border-b border-gray-200">
             <h2 className="text-lg font-semibold text-text-main">Danh sách gói cước đã trích xuất</h2>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50">
+          {/* Enable horizontal and vertical scrolling */}
+          <div className="overflow-x-auto overflow-y-auto max-h-[60vh]">
+            <table className="w-full min-w-max text-sm">
+              <thead className="bg-gray-50 sticky top-0 z-10">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase">Mã dịch vụ</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase">Giá (VNĐ)</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase">Chu kỳ</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold uppercase">Chi tiết</th>
+                  {packageFields.map((field) => (
+                    <th key={field} className="px-6 py-3 text-left text-xs font-semibold uppercase whitespace-nowrap">
+                      {field}
+                    </th>
+                  ))}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {fileImport.packages.map((pkg: Omit<Package, 'id'>, idx: number) => (
                   <tr key={idx} className="hover:bg-gray-50">
-                    <td className="px-6 py-4"><span className="font-medium">{pkg?.['Mã dịch vụ'] ?? "-"}</span></td>
-                    <td className="px-6 py-4">{pkg?.['Giá (VNĐ)']?.toLocaleString('vi-VN') ?? "-"}</td>
-                    <td className="px-6 py-4">{pkg?.['Chu kỳ (ngày)'] ?? "-"} ngày</td>
-                    <td className="px-6 py-4"><p className="text-sm text-text-muted truncate max-w-md">{pkg['Chi tiết']}</p></td>
+                    {packageFields.map((field) => (
+                      <td key={`${idx}-${field}`} className="px-6 py-4 whitespace-nowrap">
+                        {renderCell(pkg, field)}
+                      </td>
+                    ))}
                   </tr>
                 ))}
               </tbody>
