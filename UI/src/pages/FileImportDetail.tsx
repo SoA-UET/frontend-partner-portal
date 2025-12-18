@@ -209,7 +209,7 @@ const FileImportDetail: React.FC = () => {
           {/* Enable horizontal and vertical scrolling */}
           <div className="overflow-x-auto overflow-y-auto max-h-[60vh]">
             <table className="w-full min-w-max text-sm">
-              <thead className="bg-gray-50 sticky top-0 z-10">
+              <thead className="bg-gray-50 sticky top-0 z-1">
                 <tr>
                   {packageFields.map((field) => (
                     <th key={field} className="px-6 py-3 text-left text-xs font-semibold uppercase whitespace-nowrap">
