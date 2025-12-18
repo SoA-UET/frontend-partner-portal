@@ -263,7 +263,7 @@ const Metrics: React.FC = () => {
                       />
                     </div>
                     <div className="w-24 text-sm text-gray-600 text-right">
-                      {formatNumber(count)} ({percentage.toFixed(1)}%)
+                      {formatNumber(count)} ({percentage}%)
                     </div>
                   </div>
                 );
