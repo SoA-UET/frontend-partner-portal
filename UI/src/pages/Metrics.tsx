@@ -71,8 +71,16 @@ const Metrics: React.FC = () => {
   };
 
   const formatPercentage = (num: number): string => {
+    if (isNaN(num)) return '0.00%';
+    if (isFinite(num) === false) return '0.00%';
     return num.toFixed(2) + '%';
   };
+
+  const formatPercentageAuto = (numerator: number, denominator: number): string => {
+    if (denominator === 0) return '0.00%';
+    const percentage = (numerator / denominator) * 100;
+    return formatPercentage(percentage);
+  }
 
   const formatDate = (dateString: string): string => {
     if (!dateString) return '';
@@ -179,7 +187,7 @@ const Metrics: React.FC = () => {
             <MetricsCard
               title="Cuộc hội thoại text"
               value={formatNumber(conversationMetrics.texting_conversations)}
-              subtitle={`${((conversationMetrics.texting_conversations / conversationMetrics.total_conversations) * 100).toFixed(1)}% tổng số`}
+              subtitle={`${formatPercentageAuto(conversationMetrics.texting_conversations, conversationMetrics.total_conversations)} tổng số`}
               icon={MessageSquare}
               iconColor="text-green-600"
               iconBgColor="bg-green-100"
@@ -187,7 +195,7 @@ const Metrics: React.FC = () => {
             <MetricsCard
               title="Cuộc hội thoại audio"
               value={formatNumber(conversationMetrics.calling_conversations)}
-              subtitle={`${((conversationMetrics.calling_conversations / conversationMetrics.total_conversations) * 100).toFixed(1)}% tổng số`}
+              subtitle={`${formatPercentageAuto(conversationMetrics.calling_conversations, conversationMetrics.total_conversations)} tổng số`}
               icon={Phone}
               iconColor="text-purple-600"
               iconBgColor="bg-purple-100"
@@ -213,13 +221,16 @@ const Metrics: React.FC = () => {
             />
             <MetricsCard
               title="Tỷ lệ hài lòng"
-              value={formatPercentage(
-                ((satisfactionMetrics.satisfaction_distribution.satisfaction_3 +
-                  satisfactionMetrics.satisfaction_distribution.satisfaction_4 +
-                  satisfactionMetrics.satisfaction_distribution.satisfaction_5) /
-                  satisfactionMetrics.total_conversations) *
-                  100
-              )}
+              value={
+                formatPercentageAuto(
+                  (
+                    satisfactionMetrics.satisfaction_distribution.satisfaction_3 +
+                    satisfactionMetrics.satisfaction_distribution.satisfaction_4 +
+                    satisfactionMetrics.satisfaction_distribution.satisfaction_5
+                  ),
+                  satisfactionMetrics.total_conversations
+                )
+              }
               subtitle="≥ 3 sao"
               icon={TrendingUp}
               iconColor="text-green-600"
@@ -238,8 +249,8 @@ const Metrics: React.FC = () => {
                   satisfactionMetrics.satisfaction_distribution[
                     `satisfaction_${star}` as keyof typeof satisfactionMetrics.satisfaction_distribution
                   ];
-                const percentage =
-                  (count / satisfactionMetrics.total_conversations) * 100;
+
+                  const percentage = formatPercentageAuto(count, satisfactionMetrics.total_conversations);
                 return (
                   <div key={star} className="flex items-center gap-3">
                     <div className="w-20 flex items-center gap-1 text-sm font-medium text-gray-700">
@@ -287,7 +298,7 @@ const Metrics: React.FC = () => {
             <MetricsCard
               title="Chuyển đến Partner"
               value={formatNumber(offloadMetrics.ai_failed_conversation)}
-              subtitle={`${((offloadMetrics.ai_failed_conversation / offloadMetrics.total_conversations) * 100).toFixed(1)}% tổng số`}
+              subtitle={`${formatPercentageAuto(offloadMetrics.ai_failed_conversation, offloadMetrics.total_conversations)} tổng số`}
               icon={Users}
               iconColor="text-orange-600"
               iconBgColor="bg-orange-100"
