@@ -7,7 +7,7 @@ import {
 } from '@/types/partner.types';
 
 class PartnerService {
-  private readonly PARTNER_BASE = '/api/partner';
+  private readonly PARTNER_BASE = '/api/v1/partner';
 
   /**
    * H25 Endpoint 1: GET /api/partner/info
