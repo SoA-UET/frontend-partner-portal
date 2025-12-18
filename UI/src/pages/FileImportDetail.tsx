@@ -189,9 +189,9 @@ const FileImportDetail: React.FC = () => {
               <tbody className="divide-y divide-gray-200">
                 {fileImport.packages.map((pkg: Omit<Package, 'id'>, idx: number) => (
                   <tr key={idx} className="hover:bg-gray-50">
-                    <td className="px-6 py-4"><span className="font-medium">{pkg['Mã dịch vụ']}</span></td>
-                    <td className="px-6 py-4">{pkg['Giá (VNĐ)'].toLocaleString('vi-VN')}</td>
-                    <td className="px-6 py-4">{pkg['Chu kỳ (ngày)']} ngày</td>
+                    <td className="px-6 py-4"><span className="font-medium">{pkg?.['Mã dịch vụ'] ?? "-"}</span></td>
+                    <td className="px-6 py-4">{pkg?.['Giá (VNĐ)']?.toLocaleString('vi-VN') ?? "-"}</td>
+                    <td className="px-6 py-4">{pkg?.['Chu kỳ (ngày)'] ?? "-"} ngày</td>
                     <td className="px-6 py-4"><p className="text-sm text-text-muted truncate max-w-md">{pkg['Chi tiết']}</p></td>
                   </tr>
                 ))}
