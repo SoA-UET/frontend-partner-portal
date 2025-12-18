@@ -1,14 +1,39 @@
 import { updateClient } from './apiClient';
 import {
+  Update,
   UpdateFormData,
   CreateUpdateResponse,
   DeleteUpdateResponse,
   SubmitUpdateResponse,
   SubmitUpdateRequest,
+  GetUpdatesResponse,
+  GetUpdateResponse,
 } from '@/types/update.types';
 
 class UpdateService {
   private readonly BASE_URL = '/api/v1/updates';
+
+  /**
+   * GET /api/v1/updates
+   * List all updates (sorted by created_at descending)
+   */
+  async getUpdates(): Promise<Update[]> {
+    const response = await updateClient.get<GetUpdatesResponse>(
+      this.BASE_URL
+    );
+    return response.data.updates;
+  }
+
+  /**
+   * GET /api/v1/updates/{update_id}
+   * Get specific update details
+   */
+  async getUpdate(updateId: string): Promise<Update> {
+    const response = await updateClient.get<GetUpdateResponse>(
+      `${this.BASE_URL}/${updateId}`
+    );
+    return response.data.update;
+  }
 
   /**
    * POST /api/v1/updates/create

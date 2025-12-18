@@ -34,6 +34,18 @@ export interface Update {
   updated_locally_at?: string;
 }
 
+// Response when listing updates
+export interface GetUpdatesResponse {
+  status: 'success';
+  updates: Update[];
+}
+
+// Response when getting specific update
+export interface GetUpdateResponse {
+  status: 'success';
+  update: Update;
+}
+
 // Response when creating update
 export interface CreateUpdateResponse {
   status: 'success';

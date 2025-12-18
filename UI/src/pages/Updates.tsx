@@ -24,28 +24,12 @@ const Updates: React.FC = () => {
   const loadUpdates = async () => {
     try {
       setIsLoading(true);
-      // TODO: Replace with actual API call when list endpoint is available
-      // const data = await updateService.getUpdates();
-      // setUpdates(data);
-      
-      // Mock data for now
-      setUpdates([
-        {
-          update_id: 'draft_upd_1234',
-          update_name: 'Cập nhật gói cước Q4 2025',
-          source: 'Viettel',
-          update_type: 'new_entries',
-          priority: 'normal',
-          entry_count: 2,
-          seaweed_file_id: '3,01637037d6',
-          created_at: '2025-12-08T10:30:00Z',
-          created_by: 'employee_456',
-          status: 'draft',
-          notes: 'Gói cước khuyến mãi quý 4 năm 2025',
-        },
-      ]);
+      const data = await updateService.getUpdates();
+      setUpdates(data);
     } catch (error) {
       console.error('Error loading updates:', error);
+      // Show empty state on error
+      setUpdates([]);
     } finally {
       setIsLoading(false);
     }
