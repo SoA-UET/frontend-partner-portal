@@ -50,7 +50,7 @@ const Updates: React.FC = () => {
     try {
       await updateService.deleteUpdate(updateId);
       // Remove from list
-      setUpdates((prev) => prev.filter((u) => u.update_id !== updateId));
+      setUpdates((prev) => prev.filter((u) => u.id !== updateId));
       setDeleteConfirm(null);
     } catch (error) {
       console.error('Error deleting update:', error);
@@ -65,7 +65,7 @@ const Updates: React.FC = () => {
       // Update status in list
       setUpdates((prev) =>
         prev.map((u) =>
-          u.update_id === updateId
+          u.id === updateId
             ? { ...u, status: response.status as UpdateStatus, submitted_at: response.submitted_at }
             : u
         )
@@ -233,7 +233,7 @@ const Updates: React.FC = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {updates.map((update) => (
-                <tr key={update.update_id} className="hover:bg-gray-50">
+                <tr key={update.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">
                       {update.update_name}
@@ -267,7 +267,7 @@ const Updates: React.FC = () => {
                       {/* TP-16: Submit to Core (only for draft) */}
                       {update.status === 'draft' && (
                         <button
-                          onClick={() => setSubmitConfirm(update.update_id)}
+                          onClick={() => setSubmitConfirm(update.id)}
                           className="text-blue-600 hover:text-blue-900"
                           title="Gửi lên Core"
                         >
@@ -290,7 +290,7 @@ const Updates: React.FC = () => {
                       {/* TP-15: Delete (only for draft) */}
                       {update.status === 'draft' && (
                         <button
-                          onClick={() => setDeleteConfirm(update.update_id)}
+                          onClick={() => setDeleteConfirm(update.id)}
                           className="text-red-600 hover:text-red-900"
                           title="Xóa"
                         >

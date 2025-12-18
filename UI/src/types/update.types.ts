@@ -17,7 +17,7 @@ export interface UpdateFormData {
 
 // Update object
 export interface Update {
-  update_id: string;
+  id: string;
   update_name: string;
   source: string;
   update_type: UpdateType;
