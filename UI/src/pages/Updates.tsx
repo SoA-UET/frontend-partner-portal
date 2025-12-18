@@ -9,6 +9,13 @@ import {
 } from '@/types/update.types';
 import UpdateFormModal from '@/components/Updates/UpdateFormModal';
 
+const UPDATE_STATUS_LABELS: Record<string, string> = {
+  draft: 'Bản nháp',
+  pending: 'Chờ duyệt',
+  approved: 'Đã phê duyệt',
+  rejected: 'Bị từ chối',
+};
+
 const Updates: React.FC = () => {
   const [updates, setUpdates] = useState<Update[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -84,19 +91,12 @@ const Updates: React.FC = () => {
   const getStatusBadge = (status: UpdateStatus) => {
     const styles: Record<UpdateStatus, string> = {
       draft: 'bg-gray-100 text-gray-800',
-      submitted: 'bg-blue-100 text-blue-800',
-      validating: 'bg-yellow-100 text-yellow-800',
+      pending: 'bg-blue-100 text-blue-800',
       approved: 'bg-green-100 text-green-800',
       rejected: 'bg-red-100 text-red-800',
     };
 
-    const labels: Record<UpdateStatus, string> = {
-      draft: 'Bản nháp',
-      submitted: 'Đã gửi',
-      validating: 'Đang xác thực',
-      approved: 'Đã phê duyệt',
-      rejected: 'Bị từ chối',
-    };
+    const labels: Record<UpdateStatus, string> = UPDATE_STATUS_LABELS;
 
     return (
       <span
@@ -313,9 +313,9 @@ const Updates: React.FC = () => {
                       {/* Status indicator for non-draft */}
                       {update.status !== 'draft' && (
                         <span className="text-gray-400 text-xs">
-                          {update.status === 'validating' && 'Đang xử lý...'}
-                          {update.status === 'approved' && '✓ Hoàn tất'}
-                          {update.status === 'rejected' && '✗ Từ chối'}
+                          {
+                            UPDATE_STATUS_LABELS[update.status] ?? "-"
+                          }
                         </span>
                       )}
                     </div>

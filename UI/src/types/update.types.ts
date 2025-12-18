@@ -4,7 +4,7 @@ export type UpdateType = 'new_entries' | 'modifications' | 'corrections';
 
 export type Priority = 'high' | 'normal' | 'low';
 
-export type UpdateStatus = 'draft' | 'submitted' | 'validating' | 'approved' | 'rejected';
+export type UpdateStatus = 'draft' | 'pending' | 'approved' | 'rejected';
 
 // Form data for creating update
 export interface UpdateFormData {
